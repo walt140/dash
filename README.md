@@ -1,4 +1,5 @@
-# OpenDash
+# OpenDash.
+WE ARE COOL
 
 OpenDash is a Qt-based infotainment center for your Linux OpenAuto installation!
 The OpenDash project includes OpenAuto, AASDK, and Dash.
