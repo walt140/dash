@@ -4,6 +4,7 @@ canev::~canev()
 {
     if (this->climate)
         delete this->climate;
+	delete this->debug;
 }
 
 bool canev::init(ICANBus* canbus){
