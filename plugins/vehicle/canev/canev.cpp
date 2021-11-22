@@ -1,12 +1,5 @@
 #include "canev.hpp"
 
-canev::~canev()
-{
-    if (this->climate)
-        delete this->climate;
-	delete this->debug;
-}
-
 bool canev::init(ICANBus* canbus){
     this->duelClimate=false;
     if (this->arbiter) {
@@ -232,10 +225,11 @@ DebugWindow::DebugWindow(Arbiter &arbiter, QWidget *parent) : QWidget(parent)
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
+    layout->addWidget(button);  //puts button in top layout
+    layout->addWidget(radio);   //puts radio in top layout    
     layout->addWidget(textOne);
     layout->addWidget(tpmsOne);
-    layout->addWidget(button);  //puts button in top layout
-    layout->addWidget(radio);   //puts radio in top layout
+    
     layout->addWidget(Session::Forge::br(false));
 
     layout->addWidget(textTwo);
