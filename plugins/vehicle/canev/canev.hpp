@@ -1,23 +1,62 @@
 #pragma once
 
-#include <QObject>
+#include <QString>
+#include <iostream>
+#include <stdlib.h>
+#include <QByteArray>
+#include <QPushButton>
+#include <QRadioButton>
+#include <boost/log/trivial.hpp>
+
+
 #include "plugins/vehicle_plugin.hpp"
 #include "app/widgets/climate.hpp"
-#include "canbus/socketcanbus.hpp"
-#include "app/widgets/dialog.hpp"
+#include "app/arbiter.hpp"
+#include "openauto/Service/InputService.hpp"
 
-class canev : public QObject, VehiclePlugin {
+
+#define G37_LOG(severity) BOOST_LOG_TRIVIAL(severity) << "[G37VehiclePlugin]"
+
+
+class DebugWindow : public QWidget {
+    Q_OBJECT
+
+    public:
+    
+        DebugWindow(Arbiter &arbiter, QWidget *parent = nullptr);
+        QLabel* tpmsOne;
+        QLabel* tpmsTwo;
+        QLabel* tpmsThree;
+        QLabel* tpmsFour;
+        
+        
+
+};
+
+class canev : public QObject, VehiclePlugin
+{
     Q_OBJECT
     Q_PLUGIN_METADATA(IID VehiclePlugin_iid)
     Q_INTERFACES(VehiclePlugin)
 
-   public:
-    canev() {};
-    ~canev();
-    QList<QWidget *> widgets() override;
-    bool init(ICANBus*) override;
+    public:
+    
+        bool init(ICANBus* canbus) override;
 
-   private:
-    Climate *climate;
+    private:
+        QList<QWidget *> widgets() override;
+
+        bool duelClimate;
+
+        void monitorHeadlightStatus(QByteArray payload);
+        void updateClimateDisplay(QByteArray payload);
+        void updateTemperatureDisplay(QByteArray payload);
+        void engineUpdate(QByteArray payload);
+        void tpmsUpdate(QByteArray payload);
+
+
+
+        Climate *climate;
+        DebugWindow *debug;
+        bool engineRunning = false;
 };
-
