@@ -76,6 +76,10 @@ class canev : public QObject, VehiclePlugin
     public:
         ~canev();
         bool init(ICANBus* canbus) override;
+        
+     public slots:
+        bool canDemo(); 
+        
 
     private:
         QList<QWidget *> widgets() override;
