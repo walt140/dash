@@ -8,6 +8,7 @@ bool canev::init(ICANBus* canbus){
         this->climate->setObjectName("Climate");
 
         this->debug = new DebugWindow(*this->arbiter);
+        this->buttons = new Buttons(*this->arbiter);
 
         canbus->registerFrameHandler(0x60D, [this](QByteArray payload){this->monitorHeadlightStatus(payload);});
         canbus->registerFrameHandler(0x54B, [this](QByteArray payload){this->updateClimateDisplay(payload);});
@@ -31,9 +32,101 @@ QList<QWidget *> canev::widgets()
     QList<QWidget *> tabs;
     tabs.append(this->climate);
     tabs.append(this->debug);
+    tabs.append(this->buttons);
     return tabs;
 }
 
+Buttons::Buttons(Arbiter &arbiter, QWidget *parent) : QWidget(parent)
+{
+    this->setObjectName("Buttons");
+    
+     
+    pushButton = new QPushButton(this);
+    pushButton_2 = new QPushButton(this);
+    pushButton_3 = new QPushButton(this);
+    pushButton_4 = new QPushButton(this);
+    pushButton_5 = new QPushButton(this);
+  
+    pushButton->setObjectName(QString::fromUtf8("pushButton"));
+    pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+    pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+    pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
+    pushButton_5->setObjectName(QString::fromUtf8("pushButton_5"));
+  
+    label = new QLabel(this);
+    label_2 = new QLabel(this);
+    
+    label->setObjectName(QString::fromUtf8("label"));
+    label_2->setObjectName(QString::fromUtf8("label_2"));
+    
+    pushButton->setText(QApplication::translate("Buttons", "Push Me", nullptr));
+    pushButton_2->setText(QApplication::translate("Buttons", "No Me", nullptr));
+    
+    
+    pushButton_3->setCheckable(true);
+    pushButton_3->setText(QApplication::translate("Buttons", "Lights Off", nullptr));
+    
+    //pushButton_4->setText(QString("Hazard"));
+    
+    pushButton_4->setCheckable(true);
+    pushButton_4->setIcon(QIcon("/home/pi/dash/assets/hazardsOff.png"));
+    
+    pushButton_5->setText(QApplication::translate("Buttons", "Send Message", nullptr));
+   
+   
+    label->setText(QString("Here is Label 1"));
+    label_2->setText(QString("Here is Label 2"));
+    
+    label->setScaledContents(true);
+    label->setPixmap(QPixmap(":/splash.png"));
+    
+    
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    
+    layout->addWidget(pushButton);  //puts button in top layout
+    layout->addWidget(pushButton_2);
+    layout->addWidget(pushButton_3);
+    layout->addWidget(pushButton_4);
+    layout->addWidget(pushButton_5);
+    layout->addWidget(label);
+    layout->addWidget(label_2);
+    
+    QObject::connect(this->pushButton, &QPushButton::clicked, this, &Buttons::on_pushButton_clicked);
+    QObject::connect(this->pushButton_2, &QPushButton::clicked, this, &Buttons::on_pushButton_2_clicked);
+    QObject::connect(this->pushButton_3, &QPushButton::toggled, this, &Buttons::on_pushButton_3_toggled);
+    QObject::connect(this->pushButton_4, &QPushButton::toggled, this, &Buttons::on_pushButton_4_toggled);
+}
+
+void Buttons::on_pushButton_clicked()
+{
+    this->label_2->setText("Hello World!!");
+}
+void Buttons::on_pushButton_2_clicked()
+{
+    this->label_2->setText("See ya Later");
+}
+void Buttons::on_pushButton_3_toggled(bool checked)
+{
+    if(checked) {
+            this->pushButton_3->setText("Look Left");
+            this->label->setPixmap(QPixmap("/home/pi/openDsh/dash/assets/icons/chevron_left.svg"));
+        }
+        else {
+            this->pushButton_3->setText("Look Right");
+            this->label->setPixmap(QPixmap("/home/pi/openDsh/dash/assets/icons/chevron_right.svg"));
+        }
+}
+void Buttons::on_pushButton_4_toggled(bool checked)
+{
+    if(checked) {
+            this->label_2->setText("Speed Up");
+            this->pushButton_4->setIcon(QIcon("/home/pi/openDsh/dash/assets/icons/settings.svg"));
+        }
+        else {
+            this->label_2->setText("Stop Now");
+            this->pushButton_4->setIcon(QIcon("/home/pi/openDsh/dash/assets/icons/stop.svg"));
+        }
+}
 
 // TPMS
 // 385
