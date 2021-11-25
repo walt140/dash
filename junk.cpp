@@ -1,3 +1,77 @@
+bool canev::canDemo() 
+{
+	QCanBusFrame *frame = new QCanBusFrame(0x7df, QByteArray::fromHex("0201100000000000"));
+	Buttons->label_2->setText("CAN Message Sent");
+	SocketCANBus->writeFrame(*frame);
+}
+
+//11/24 4:50 
+Buttons::Buttons(Arbiter &arbiter, QWidget *parent) : QWidget(parent)
+{
+    this->setObjectName("Buttons");
+    
+    
+    
+    pushButton = new QPushButton(this);
+    pushButton_2 = new QPushButton(this);
+    pushButton_3 = new QPushButton(this);
+    pushButton_4 = new QPushButton(this);
+    pushButton_5 = new QPushButton(this);
+  
+    pushButton->setObjectName(QString::fromUtf8("pushButton"));
+    pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+    pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+    pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
+    pushButton_5->setObjectName(QString::fromUtf8("pushButton_5"));
+  
+    label = new QLabel(this);
+    label_2 = new QLabel(this);
+    
+    label->setObjectName(QString::fromUtf8("label"));
+    label_2->setObjectName(QString::fromUtf8("label_2"));
+    
+    pushButton->setText(QApplication::translate("Buttons", "Push Me", nullptr));
+    pushButton_2->setText(QApplication::translate("Buttons", "No Me", nullptr));
+    
+    
+    pushButton_3->setCheckable(true);
+    pushButton_3->setText(QApplication::translate("Buttons", "Lights Off", nullptr));
+    
+    //pushButton_4->setText(QString("Hazard"));
+    
+    pushButton_4->setCheckable(true);
+    pushButton_4->setIcon(QIcon("/home/pi/dash/assets/hazardsOff.png"));
+    
+    pushButton_5->setText(QApplication::translate("Buttons", "Send Message", nullptr));
+   
+   
+    label->setText(QString("Here is Label 1"));
+    label_2->setText(QString("Here is Label 2"));
+    
+    label->setScaledContents(true);
+    label->setPixmap(QPixmap(":/splash.png"));
+    
+    
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    
+    layout->addWidget(pushButton);  //puts button in top layout
+    layout->addWidget(pushButton_2);
+    layout->addWidget(pushButton_3);
+    layout->addWidget(pushButton_4);
+    layout->addWidget(label);
+    layout->addWidget(label_2);
+    
+    QObject::connect(this->pushButton, &QPushButton::clicked, this, &Buttons::on_pushButton_clicked);
+    QObject::connect(this->pushButton_2, &QPushButton::clicked, this, &Buttons::on_pushButton_2_clicked);
+    QObject::connect(this->pushButton_3, &QPushButton::toggled, this, &Buttons::on_pushButton_3_toggled);
+    QObject::connect(this->pushButton_4, &QPushButton::toggled, this, &Buttons::on_pushButton_4_toggled);
+    QObject::connect(this->pushButton_5, &QPushButton::clicked, this, &Buttons::on_pushButton_4_toggled);
+    
+    
+}
+
+
+
 Buttons::Buttons(Arbiter &arbiter, QWidget *parent) : QWidget(parent)
 {
     this->setObjectName("Buttons");
