@@ -33,6 +33,40 @@ class DebugWindow : public QWidget {
 
 };
 
+class Buttons : public QWidget {
+    Q_OBJECT
+
+    public:
+        Buttons(Arbiter &arbiter, QWidget *parent = nullptr);
+        
+               
+        QPushButton *pushButton;
+        QPushButton *pushButton_2;
+        QPushButton *pushButton_3;        
+        QPushButton *pushButton_4;
+        QPushButton *pushButton_5;
+        
+        QLabel *label;
+        QLabel *label_2;
+        
+        
+        
+public slots:
+    void on_headlights_clicked();
+
+    void on_headlights_2_toggled(bool checked);
+    
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_toggled(bool checked);
+
+    void on_pushButton_4_toggled(bool checked);
+
+        
+};
+
 class canev : public QObject, VehiclePlugin
 {
     Q_OBJECT
@@ -58,5 +92,6 @@ class canev : public QObject, VehiclePlugin
 
         Climate *climate;
         DebugWindow *debug;
+        Buttons *buttons;
         bool engineRunning = false;
 };
