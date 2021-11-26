@@ -39,31 +39,34 @@ class Buttons : public QWidget {
     public:
         Buttons(Arbiter &arbiter, QWidget *parent = nullptr);
         
-               
-        QPushButton *pushButton;
-        QPushButton *pushButton_2;
-        QPushButton *pushButton_3;        
-        QPushButton *pushButton_4;
-        QPushButton *pushButton_5;
+          QPushButton *hazardButton;
+        QPushButton *lightsButton;
+        QPushButton *wipersButton;        
+        QPushButton *heaterButton;
+        QPushButton *arrowUpButton;
+        QPushButton *arrowDownButton;
+        QPushButton *frontDefrostButton;
+        QPushButton *rearDefrostButton;
+        QPushButton *rabbitButton;
+        QPushButton *turtleButton;
         
-        QLabel *label;
-        QLabel *label_2;
+        QLabel *hoistLabel;     
+     
         
         
         
 public slots:
-    void on_headlights_clicked();
-
-    void on_headlights_2_toggled(bool checked);
+   
+void on_hazardButton_toggled(bool checked);
+    void on_lightsButton_toggled(bool checked);
+    void on_wipersButton_toggled(bool checked);
+    void on_heaterButton_toggled(bool checked);
+    void on_frontDefrostButton_toggled(bool checked);
+    void on_rearDefrostButton_toggled(bool checked);
+    void on_rabbitButton_toggled(bool checked);
+    void on_turtleButton_toggled(bool checked);
     
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_toggled(bool checked);
-
-    void on_pushButton_4_toggled(bool checked);
-
+    void on_arrowUpButton_clicked();
         
 };
 
