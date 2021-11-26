@@ -37,97 +37,209 @@ QList<QWidget *> canev::widgets()
 }
 
 Buttons::Buttons(Arbiter &arbiter, QWidget *parent) : QWidget(parent)
-{
-    this->setObjectName("Buttons");
+{ this->setObjectName("Buttons");
     
-     
-    pushButton = new QPushButton(this);
-    pushButton_2 = new QPushButton(this);
-    pushButton_3 = new QPushButton(this);
-    pushButton_4 = new QPushButton(this);
-    pushButton_5 = new QPushButton(this);
+     //this->bus = new ICANBus(this->arbiter);
+    
+    
+     hazardButton = new QPushButton(this);		//created buttons 
+     lightsButton = new QPushButton(this);
+     wipersButton = new QPushButton(this);
+     heaterButton = new QPushButton(this);
+     arrowUpButton = new QPushButton(this);
+     arrowDownButton = new QPushButton(this);
+     frontDefrostButton = new QPushButton(this);
+     rearDefrostButton = new QPushButton(this);
+     rabbitButton = new QPushButton(this);
+     turtleButton = new QPushButton(this);    
+     hoistLabel = new QLabel(this);
+	
   
-    pushButton->setObjectName(QString::fromUtf8("pushButton"));
-    pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
-    pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
-    pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
-    pushButton_5->setObjectName(QString::fromUtf8("pushButton_5"));
-  
-    label = new QLabel(this);
-    label_2 = new QLabel(this);
+    	hazardButton->setObjectName(QString::fromUtf8("hazardButton"));
+    	lightsButton->setObjectName(QString::fromUtf8("lightsButton"));
+	wipersButton->setObjectName(QString::fromUtf8("wipersButton"));
+	heaterButton->setObjectName(QString::fromUtf8("heaterButton"));
+	arrowUpButton->setObjectName(QString::fromUtf8("arrowUpButton"));
+	arrowDownButton->setObjectName(QString::fromUtf8("arrowDownButton"));
+	frontDefrostButton->setObjectName(QString::fromUtf8("frontDefrostButton"));
+	rearDefrostButton->setObjectName(QString::fromUtf8("rearDefrostButton"));	
+	rabbitButton->setObjectName(QString::fromUtf8("rabbitButton"));
+	turtleButton->setObjectName(QString::fromUtf8("turtleButton"));
+	hoistLabel->setObjectName(QString::fromUtf8("hoistLabel"));
+	
+                   
+   	hazardButton->setIcon(QIcon("/home/pi/dash/images/hazardsOff.png"));
+    	hazardButton->setGeometry(QRect(10, 10, 161, 161));
+   	hazardButton->setIconSize(QSize(90, 90));
+	hazardButton->setCheckable(true);
+	
+	lightsButton->setIcon(QIcon("/home/pi/dash/images/lightsOff.png"));
+	lightsButton->setGeometry(QRect(290, 10, 161, 161));
+	lightsButton->setIconSize(QSize(90, 90));
+	lightsButton->setCheckable(true);
+
+	wipersButton->setIcon(QIcon("/home/pi/dash/images/wipersOff.png"));
+	wipersButton->setGeometry(QRect(260, 230, 161, 161));
+	wipersButton->setIconSize(QSize(90, 90));
+    	wipersButton->setCheckable(true);
+
+	heaterButton->setIcon(QIcon("/home/pi/dash/images/heaterOff.png"));
+	heaterButton->setGeometry(QRect(560, 230, 161, 161));
+	heaterButton->setIconSize(QSize(90, 90));
+    	heaterButton->setCheckable(true);
+
+	arrowUpButton->setIcon(QIcon("/home/pi/dash/images/arrowUp.png"));
+    	arrowUpButton->setGeometry(QRect(160, 230, 71, 71));
+	arrowUpButton->setIconSize(QSize(50, 50));
+	
+	arrowDownButton->setIcon(QIcon("/home/pi/dash/images/arrowDown.png"));
+	arrowDownButton->setGeometry(QRect(160, 320, 71, 71));
+	arrowDownButton->setIconSize(QSize(50, 50));
+	
+	frontDefrostButton->setIcon(QIcon("/home/pi/dash/images/frontDefrostOff.png"));
+	frontDefrostButton->setGeometry(QRect(460, 230, 71, 71));
+	frontDefrostButton->setIconSize(QSize(50, 50));
+	frontDefrostButton->setCheckable(true);
+	
+	rearDefrostButton->setIcon(QIcon("/home/pi/dash/images/rearDefrostOff.png"));
+	rearDefrostButton->setGeometry(QRect(460, 320, 71, 71));
+	rearDefrostButton->setIconSize(QSize(50, 50));
+    	rearDefrostButton->setCheckable(true);
+	
+	rabbitButton->setIcon(QIcon("/home/pi/dash/images/rabbitOff.png"));
+	rabbitButton->setGeometry(QRect(580, 10, 101, 91));
+	rabbitButton->setIconSize(QSize(50, 50));
+    	rabbitButton->setCheckable(true);
+	
+	turtleButton->setIcon(QIcon("/home/pi/dash/images/turtleOff.png"));
+	turtleButton->setGeometry(QRect(580, 110, 101, 91));
+	turtleButton->setIconSize(QSize(50, 50));
+    	turtleButton->setCheckable(true);
     
-    label->setObjectName(QString::fromUtf8("label"));
-    label_2->setObjectName(QString::fromUtf8("label_2"));
+   	hoistLabel->setPixmap(QPixmap("/home/pi/dash/images/hoist.png"));
+   	hoistLabel->setGeometry(QRect(30, 290, 101, 81));
+
     
-    pushButton->setText(QApplication::translate("Buttons", "Push Me", nullptr));
-    pushButton_2->setText(QApplication::translate("Buttons", "No Me", nullptr));
+    QObject::connect(this->hazardButton, &QPushButton::clicked, this, &Buttons::on_hazardButton_toggled);
+    QObject::connect(this->lightsButton, &QPushButton::clicked, this, &Buttons::on_lightsButton_toggled);
+    QObject::connect(this->wipersButton, &QPushButton::clicked, this, &Buttons::on_wipersButton_toggled);
+    QObject::connect(this->heaterButton, &QPushButton::clicked, this, &Buttons::on_heaterButton_toggled);
+    QObject::connect(this->frontDefrostButton, &QPushButton::clicked, this, &Buttons::on_frontDefrostButton_toggled);
+    QObject::connect(this->rearDefrostButton, &QPushButton::clicked, this, &Buttons::on_rearDefrostButton_toggled);
+    QObject::connect(this->rabbitButton, &QPushButton::clicked, this, &Buttons::on_rabbitButton_toggled);
+    QObject::connect(this->turtleButton, &QPushButton::clicked, this, &Buttons::on_turtleButton_toggled);
     
+    QObject::connect(this->arrowUpButton, &QPushButton::clicked, [this]() 
+    { 
+		this->hazardButton->setIcon(QIcon("/home/pi/dash/images/hazardsOn.png"));
+		
+		QCanBusDevice *device = QCanBus::instance()->createDevice("socketcan", "can0");		
+		QByteArray payload = QByteArray::fromHex("03410DFF00000000");
+		QCanBusFrame frame(0x7e8, payload);
+		device->connectDevice();
+		device->writeFrame(frame);
+		
+					
+		//const uint myArray[4] = {0x03, 0x41, 0x0D, 0x00};
+		
+		});
+          
     
-    pushButton_3->setCheckable(true);
-    pushButton_3->setText(QApplication::translate("Buttons", "Lights Off", nullptr));
-    
-    //pushButton_4->setText(QString("Hazard"));
-    
-    pushButton_4->setCheckable(true);
-    pushButton_4->setIcon(QIcon("/home/pi/dash/assets/hazardsOff.png"));
-    
-    pushButton_5->setText(QApplication::translate("Buttons", "Send Message", nullptr));
-   
-   
-    label->setText(QString("Here is Label 1"));
-    label_2->setText(QString("Here is Label 2"));
-    
-    label->setScaledContents(true);
-    label->setPixmap(QPixmap(":/splash.png"));
-    
-    
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    
-    layout->addWidget(pushButton);  //puts button in top layout
-    layout->addWidget(pushButton_2);
-    layout->addWidget(pushButton_3);
-    layout->addWidget(pushButton_4);
-    layout->addWidget(pushButton_5);
-    layout->addWidget(label);
-    layout->addWidget(label_2);
-    
-    QObject::connect(this->pushButton, &QPushButton::clicked, this, &Buttons::on_pushButton_clicked);
-    QObject::connect(this->pushButton_2, &QPushButton::clicked, this, &Buttons::on_pushButton_2_clicked);
-    QObject::connect(this->pushButton_3, &QPushButton::toggled, this, &Buttons::on_pushButton_3_toggled);
-    QObject::connect(this->pushButton_4, &QPushButton::toggled, this, &Buttons::on_pushButton_4_toggled);
 }
 
-void Buttons::on_pushButton_clicked()
+void Buttons::on_arrowUpButton_clicked()
 {
-    this->label_2->setText("Hello World!!");
+	
 }
-void Buttons::on_pushButton_2_clicked()
-{
-    this->label_2->setText("See ya Later");
-}
-void Buttons::on_pushButton_3_toggled(bool checked)
+
+void Buttons::on_hazardButton_toggled(bool checked)
 {
     if(checked) {
-            this->pushButton_3->setText("Look Left");
-            this->label->setPixmap(QPixmap("/home/pi/openDsh/dash/assets/icons/chevron_left.svg"));
+            this->hazardButton->setIcon(QIcon("/home/pi/dash/images/hazardsOn.png"));
+            
         }
         else {
-            this->pushButton_3->setText("Look Right");
-            this->label->setPixmap(QPixmap("/home/pi/openDsh/dash/assets/icons/chevron_right.svg"));
-        }
-}
-void Buttons::on_pushButton_4_toggled(bool checked)
-{
-    if(checked) {
-            this->label_2->setText("Speed Up");
-            this->pushButton_4->setIcon(QIcon("/home/pi/openDsh/dash/assets/icons/settings.svg"));
-        }
-        else {
-            this->label_2->setText("Stop Now");
-            this->pushButton_4->setIcon(QIcon("/home/pi/openDsh/dash/assets/icons/stop.svg"));
+            this->hazardButton->setIcon(QIcon("/home/pi/dash/images/hazardsOff.png"));
         }
 }
 
+void Buttons::on_lightsButton_toggled(bool checked)
+{
+    if(checked) {
+            this->lightsButton->setIcon(QIcon("/home/pi/dash/images/lightsOn.png"));
+            
+        }
+        else {
+            this->lightsButton->setIcon(QIcon("/home/pi/dash/images/lightsOff.png"));
+        }
+}
+
+void Buttons::on_wipersButton_toggled(bool checked)
+{
+    if(checked) {
+            this->wipersButton->setIcon(QIcon("/home/pi/dash/images/wipersOn.png"));
+            
+        }
+        else {
+            this->wipersButton->setIcon(QIcon("/home/pi/dash/images/wipersOff.png"));
+        }
+}
+
+void Buttons::on_heaterButton_toggled(bool checked)
+{
+    if(checked) {
+            this->heaterButton->setIcon(QIcon("/home/pi/dash/images/heaterOn.png"));
+            
+        }
+        else {
+            this->heaterButton->setIcon(QIcon("/home/pi/dash/images/heaterOff.png"));
+        }
+}
+
+void Buttons::on_frontDefrostButton_toggled(bool checked)
+{
+    if(checked) {
+            this->frontDefrostButton->setIcon(QIcon("/home/pi/dash/images/frontDefrostOn.png"));
+            
+        }
+        else {
+            this->frontDefrostButton->setIcon(QIcon("/home/pi/dash/images/frontDefrostOff.png"));
+        }
+}
+
+void Buttons::on_rearDefrostButton_toggled(bool checked)
+{
+    if(checked) {
+            this->rearDefrostButton->setIcon(QIcon("/home/pi/dash/images/rearDefrostOn.png"));
+            
+        }
+        else {
+            this->rearDefrostButton->setIcon(QIcon("/home/pi/dash/images/rearDefrostOff.png"));
+        }
+}
+
+void Buttons::on_rabbitButton_toggled(bool checked)
+{
+    if(checked) {
+            this->rabbitButton->setIcon(QIcon("/home/pi/dash/images/rabbitOn.png"));
+            
+        }
+        else {
+            this->rabbitButton->setIcon(QIcon("/home/pi/dash/images/rabbitOff.png"));
+        }
+}
+
+void Buttons::on_turtleButton_toggled(bool checked)
+{
+    if(checked) {
+            this->turtleButton->setIcon(QIcon("/home/pi/dash/images/turtleOn.png"));
+            
+        }
+        else {
+            this->turtleButton->setIcon(QIcon("/home/pi/dash/images/turtleOff.png"));
+        }
+}
+    
 // TPMS
 // 385
 // THIRD BYTE:
