@@ -163,17 +163,26 @@ void Buttons::on_hazardButton_toggled(bool checked)
         }
 }
 
-void Buttons::on_lightsButton_toggled(bool checked)
+void Buttons::on_lightsButton_toggled(bool checked)	//toggles light on PDM
 {
+	 QCanBusDevice *device = QCanBus::instance()->createDevice("socketcan", "can0");	
+	 device->connectDevice();	
+	 
     if(checked) {
+			
             this->lightsButton->setIcon(QIcon("/home/pi/dash/images/lightsOn.png"));
-            
+       
+		//QByteArray payload = QByteArray::fromHex("03410D0000000000");
+		QCanBusFrame frame(0x14ef1e11, QByteArray::fromHex("047F000000000001")); //01 for bit enabled, light on
+		device->writeFrame(frame);	
         }
         else {
             this->lightsButton->setIcon(QIcon("/home/pi/dash/images/lightsOff.png"));
+        
+        	QCanBusFrame frame(0x14ef1e11, QByteArray::fromHex("047F000000000000")); //00 for bit disabled, light off
+		device->writeFrame(frame);
         }
 }
-
 void Buttons::on_wipersButton_toggled(bool checked)
 {
     if(checked) {
