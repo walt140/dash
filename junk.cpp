@@ -1,3 +1,60 @@
+
+#include "counter.h"
+
+Counter::Counter(QObject *parent) : QObject(parent)
+{
+    auto timer = new QTimer(this);
+
+    QObject::connect(timer, &QTimer::timeout, this, &Counter::onTimer);
+    QObject::connect(this, &Counter::startCounter, this, &Counter::onCounter);
+
+    timer->start(1000);
+    m_value = 0;
+}
+
+void Counter::setValue(int value)
+{
+    if (value != m_value) {
+            m_value = value;
+            emit valueChanged(value);
+        }
+}
+
+void Counter::onTimer()
+{
+   static int counter = 0;
+   emit onCounter(counter);
+}
+
+void Counter::onCounter(int &counter)
+{
+    uint8_t check = 255;
+
+    if(counter < check)
+    {
+        QByteArray payload = QByteArray::fromHex("03410D00");
+        payload[3] = counter;
+        qDebug() << "payload " << payload.toHex();
+    }
+
+    else
+    {
+         QByteArray payload = QByteArray::fromHex("03410D00");
+          qDebug() << "payload " << payload.toHex();
+    }
+
+    counter++;
+    qDebug() << "onCounter " << counter;
+}
+
+
+
+
+
+
+
+
+
 bool canev::canDemo() 
 {
 	QCanBusFrame *frame = new QCanBusFrame(0x7df, QByteArray::fromHex("0201100000000000"));
