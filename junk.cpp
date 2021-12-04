@@ -1,4 +1,135 @@
 
+
+#include "symposium.hpp"
+
+
+Symposium::~Symposium()
+{
+    if (this->climate) {
+        delete this->climate;
+                
+	}
+}
+
+bool Symposium::init(ICANBus* canbus){
+    
+    if (this->arbiter) {
+        this->climate = new Climate(*this->arbiter);
+        this->climate->setObjectName("Symposium");
+              
+        this->counter = new Counter(*this->arbiter);
+    
+        return true;
+    }
+    else{
+        
+        return false;
+    }
+    
+
+}
+
+QList<QWidget *> Symposium::widgets()
+{
+    QList<QWidget *> tabs;
+    tabs.append(this->counter);
+    return tabs;
+}
+
+
+Counter::Counter(Arbiter &arbiter, QWidget *parent) : QWidget(parent)
+{
+    this->setObjectName("Counter");
+    
+    auto timer = new QTimer(this);
+    onStartup = new QTimer(this);
+
+    QObject::connect(timer, &QTimer::timeout, this, &Counter::onTimer);
+    QObject::connect(this, &Counter::startCounter, this, &Counter::onCounter);
+    
+    //QObject::connect(onStartup, &QTimer::timeout, this, &Counter::onFrame);
+    //QObject::connect(this, &Counter::sendDevice, this, &Counter::onCounter);
+
+    timer->start(100);
+    onStartup->start(10);
+    m_value = 0;
+        
+}
+
+
+
+void Counter::onTimer()
+{
+   static int counter = 0;
+   emit startCounter(counter);
+}
+
+void Counter::onFrame()
+{
+	QCanBusDevice device = QCanBus::instance()->createDevice("socketcan", "can0");	
+	device->connectDevice();
+	emit sendDevice(device);
+}
+
+void Counter::onCounter(int &counter, QCanBusDevice device)
+{
+	//QCanBusDevice static keepThisDevice = device;
+		
+	uint16_t pid = 0x7e8;
+	
+	//QByteArray payload = QByteArray::fromHex("03410D0000000000");
+	//QCanBusFrame frame(0x7e8, QByteArray::fromHex("03410D0000000000"));
+		
+	
+    uint8_t check = 255;
+
+    if(counter < check)
+    {
+        QByteArray payload = QByteArray::fromHex("03410D00");
+        payload[3] = counter;
+        //qDebug() << "payload " << payload.toHex();
+        //qDebug() << "onCounter " << counter;
+        
+        QCanBusFrame frame(pid, payload);
+        device->writeFrame(frame);	
+        
+        counter++;
+    }
+
+
+//counter now = 255 & check = 255
+    else
+    {
+        static int backCounter= 255;
+        uint8_t back = 0;
+
+        if(back < backCounter)
+        {
+          QByteArray payload = QByteArray::fromHex("03410D00");
+          payload[3] = backCounter;
+          //qDebug() << "payload " << payload.toHex();
+          //qDebug() << "backCounter " << backCounter;
+          
+          QCanBusFrame frame(pid, payload);
+		  &device->writeFrame(frame);	
+        
+          backCounter --;
+        }
+
+        else
+        {
+          QByteArray payload = QByteArray::fromHex("03410D00");
+          //qDebug() << "payload " << payload.toHex();
+          
+          QCanBusFrame frame(pid, payload);
+          device->writeFrame(frame);	
+          backCounter = 255;
+          counter = 0;
+        }
+    }
+}
+
+_____________________________________________________________________________________
 #include "counter.h"
 
 Counter::Counter(QObject *parent) : QObject(parent)
