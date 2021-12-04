@@ -35,22 +35,39 @@ void Counter::onCounter(int &counter)
         QByteArray payload = QByteArray::fromHex("03410D00");
         payload[3] = counter;
         qDebug() << "payload " << payload.toHex();
+        qDebug() << "onCounter " << counter;
+        counter++;
     }
 
+
+//counter now = 255 & check = 255
     else
     {
-         QByteArray payload = QByteArray::fromHex("03410D00");
+        static int backCounter= 255;
+        uint8_t back = 0;
+
+        if(back < backCounter)
+        {
+          QByteArray payload = QByteArray::fromHex("03410D00");
+          payload[3] = backCounter;
           qDebug() << "payload " << payload.toHex();
+          qDebug() << "backCounter " << backCounter;
+          backCounter --;
+        }
+
+        else
+        {
+          QByteArray payload = QByteArray::fromHex("03410D00");
+          qDebug() << "payload " << payload.toHex();
+          backCounter = 255;
+          counter = 0;
+        }
     }
 
-    counter++;
-    qDebug() << "onCounter " << counter;
 }
 
 
-
-
-
+___________________________________________________________________________________
 
 
 
