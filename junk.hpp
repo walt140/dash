@@ -1,3 +1,65 @@
+#pragma once
+
+#include <QObject>
+#include <QTimer>
+#include "plugins/vehicle_plugin.hpp"
+#include "app/widgets/climate.hpp"
+#include "canbus/socketcanbus.hpp"
+
+
+class Counter : public QWidget
+{
+    Q_OBJECT
+public:
+    //explicit Counter(QObject *parent = nullptr);
+	Counter(Arbiter &arbiter, QWidget *parent = nullptr);
+
+    int value() const {return m_value;}
+
+    
+signals:
+    void startCounter(int &counter);
+    void sendDevice(QCanBusDevice &device);
+
+
+public slots:
+    
+
+    void onTimer();
+    void onCounter(int &counter, QCanBusDevice &device);
+    void onFrame();
+
+private:
+    int m_value;
+    QTimer* onStartup;
+
+
+};
+
+
+class Symposium : public QObject, VehiclePlugin 
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID VehiclePlugin_iid)
+    Q_INTERFACES(VehiclePlugin)
+
+   public:
+   
+    ~Symposium();
+    QList<QWidget *> widgets() override;
+    bool init(ICANBus*) override;
+
+   private:
+    Climate *climate;
+    Counter *counter;
+};
+
+
+___________________________________________________________________________
+
+
+
+
 #ifndef COUNTER_H
 #define COUNTER_H
 
