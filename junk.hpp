@@ -1,3 +1,43 @@
+#ifndef COUNTER_H
+#define COUNTER_H
+
+#include <QObject>
+#include <QTimer>
+#include <QDebug>
+
+class Counter : public QObject
+{
+    Q_OBJECT
+public:
+    explicit Counter(QObject *parent = nullptr);
+
+
+    int value() const {return m_value;}
+
+    void tryMessage(int &mess);
+
+
+signals:
+    void startCounter(int &counter);
+
+    void valueChanged(int value);
+
+public slots:
+    void setValue(int value);
+
+    void onTimer();
+    void onCounter(int &counter);
+
+private:
+    int m_value;
+
+
+};
+
+#endif // COUNTER_H
+
+____________________________________
+
 #pragma once
 
 #include <QString>
